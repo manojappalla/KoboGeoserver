@@ -1,6 +1,9 @@
-from geo.Geoserver import Geoserver
+# IMPORT THE LIBRARIES
+from Geoserver import Geoserver
 import configparser
 
+
+# DEFINE THE Auth CLASS
 class Auth:
 
     def __init__(self, url, username, password, workspace_name):
@@ -28,14 +31,22 @@ class Auth:
         workspace_bool = None
 
         self.geo = Geoserver(url, username=username, password=password)
-        workspaces = self.geo.get_workspaces()
-        for name in workspaces['workspaces']['workspace']:
-            if name['name'] == self.workspace_name:
-                print("Workspace is already existing")
-                workspace_bool = False
-            else:
-                workspace_bool = True
+        workspaces, chk = self.geo.get_workspaces()
+
+        if chk:
+            print("Authenticated...")
+            for name in workspaces['workspaces']['workspace']:
+                if name['name'] == self.workspace_name:
+                    print("Workspace is already existing")
+                    workspace_bool = False
+                else:
+                    workspace_bool = True
+
+        else:
+            print("Wrong Credentials. Please enter correct credentials for geoserver.")
+
         return workspace_bool
+
 
     def storeAuthAndAuthenticate(self):
 
@@ -48,7 +59,7 @@ class Auth:
         config = configparser.ConfigParser()
         config.read('auth.ini')
 
-        if (config['Geoserver Credentials']['Url'] != self.url and config['Geoserver Credentials']['Username'] != self.username and config['Geoserver Credentials']['password'] != self.password):
+        if ((config['Geoserver Credentials']['Url'] != self.url) or (config['Geoserver Credentials']['Username'] != self.username) or (config['Geoserver Credentials']['password'] != self.password)):
             config['Geoserver Credentials']['Url'] = self.url
             config['Geoserver Credentials']['Username'] = self.username
             config['Geoserver Credentials']['password'] = self.password
@@ -69,14 +80,22 @@ class Auth:
 
         if self.storeAuthAndAuthenticate():
             self.geo.create_workspace(workspace=self.workspace_name)
-        print("The workspace {} has been created.".format(self.workspace_name))
+            print("The workspace {} has been created.".format(self.workspace_name))
 
 
 
-url = input("Enter url: ")
-username = input("Enter username: ")
-password = input("Enter password: ")
-workspace_name = input("Enter workspace name: ")
 
-auth = Auth(url, username, password, workspace_name)
-auth.createWorkspace()
+
+
+"""
+*************************************************************************************************
+                                TESTING
+*************************************************************************************************
+"""
+# url = input("Enter url: ")
+# username = input("Enter username: ")
+# password = input("Enter password: ")
+# workspace_name = input("Enter workspace name: ")
+#
+# auth = Auth(url, username, password, workspace_name)
+# auth.createWorkspace()

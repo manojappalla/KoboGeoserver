@@ -195,10 +195,10 @@ class Geoserver:
         try:
             url = "{}/rest/workspaces".format(self.service_url)
             r = requests.get(url, auth=(self.username, self.password))
-            return r.json()
+            return r.json(), True
 
         except Exception as e:
-            return "get_workspaces error: {}".format(e)
+            return "get_workspaces error: {}".format(e), False
 
     def set_default_workspace(self, workspace: str):
         """

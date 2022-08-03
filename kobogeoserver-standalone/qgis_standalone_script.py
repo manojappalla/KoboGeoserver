@@ -1,6 +1,11 @@
 from qgis.core import *
 from PyQt5.QtCore import *
 from qgis.utils import *
+
+# import os
+# os.environ["PROJ_LIB"]="/Applications/QGIS-LTR.app/Contents/Resources/proj"
+
+QgsApplication.setPrefixPath("/Applications/QGIS-LTR.app/Contents/MacOS", True)
 qgs = QgsApplication([], False)
 qgs.initQgis()
 
