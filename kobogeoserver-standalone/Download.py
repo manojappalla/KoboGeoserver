@@ -7,6 +7,25 @@ import json
 from PyQt5.QtCore import *
 from Auth import Auth
 
+
+def qtype(odktype):
+    if odktype == 'binary':
+        return QVariant.String,{'DocumentViewer': 2, 'DocumentViewerHeight': 0, 'DocumentViewerWidth': 0, 'FileWidget': True, 'FileWidgetButton': True, 'FileWidgetFilter': '', 'PropertyCollection': {'name': None, 'properties': {}, 'type': 'collection'}, 'RelativeStorage': 0, 'StorageMode': 0}
+    elif odktype=='string':
+        return QVariant.String,{}
+    elif odktype[:3] == 'sel' :
+        return QVariant.String,{}
+    elif odktype[:3] == 'int':
+        return QVariant.Int, {}
+    elif odktype[:3]=='dat':
+        return QVariant.Date, {}
+    elif odktype[:3]=='ima':
+        return QVariant.String,{'DocumentViewer': 2, 'DocumentViewerHeight': 0, 'DocumentViewerWidth': 0, 'FileWidget': True, 'FileWidgetButton': True, 'FileWidgetFilter': '', 'PropertyCollection': {'name': None, 'properties': {}, 'type': 'collection'}, 'RelativeStorage': 0, 'StorageMode': 0}
+    elif odktype == 'Hidden':
+        return 'Hidden'
+    else:
+        return (QVariant.String),{}
+
 class Import:
 
     def __init__(self, kobo_url, kobo_username, kobo_password):
@@ -55,30 +74,6 @@ class Import:
             return proxyDict
         else:
             return None
-
-    def qtype(self, odktype):
-        if odktype == 'binary':
-            return QVariant.String, {'DocumentViewer': 2, 'DocumentViewerHeight': 0, 'DocumentViewerWidth': 0,
-                                     'FileWidget': True, 'FileWidgetButton': True, 'FileWidgetFilter': '',
-                                     'PropertyCollection': {'name': None, 'properties': {}, 'type': 'collection'},
-                                     'RelativeStorage': 0, 'StorageMode': 0}
-        elif odktype == 'string':
-            return QVariant.String, {}
-        elif odktype[:3] == 'sel':
-            return QVariant.String, {}
-        elif odktype[:3] == 'int':
-            return QVariant.Int, {}
-        elif odktype[:3] == 'dat':
-            return QVariant.Date, {}
-        elif odktype[:3] == 'ima':
-            return QVariant.String, {'DocumentViewer': 2, 'DocumentViewerHeight': 0, 'DocumentViewerWidth': 0,
-                                     'FileWidget': True, 'FileWidgetButton': True, 'FileWidgetFilter': '',
-                                     'PropertyCollection': {'name': None, 'properties': {}, 'type': 'collection'},
-                                     'RelativeStorage': 0, 'StorageMode': 0}
-        elif odktype == 'Hidden':
-            return 'Hidden'
-        else:
-            return (QVariant.String), {}
 
     def getFormList(self):
 
@@ -183,7 +178,7 @@ class Import:
                 continue
             fields[fieldName]=fieldType
             # print('attrib type is',attrib['type'])
-            qgstype,config = self.qtype(attrib['type'])
+            qgstype,config = qtype(attrib['type'])
 #            print ('first attribute'+ fieldName)
             inputs=root[1].findall('.//*[@ref]')
             if fieldType[:3]!='geo':
