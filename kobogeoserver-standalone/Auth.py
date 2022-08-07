@@ -23,7 +23,7 @@ class Auth:
         """
 
         config = configparser.ConfigParser()
-        config.read('auth.ini')
+        config.read('geoserver_auth.ini')
 
         url = config['Geoserver Credentials']['Url']
         username = config['Geoserver Credentials']['Username']
@@ -57,13 +57,13 @@ class Auth:
         """
 
         config = configparser.ConfigParser()
-        config.read('auth.ini')
+        config.read('geoserver_auth.ini')
 
         if ((config['Geoserver Credentials']['Url'] != self.url) or (config['Geoserver Credentials']['Username'] != self.username) or (config['Geoserver Credentials']['password'] != self.password)):
             config['Geoserver Credentials']['Url'] = self.url
             config['Geoserver Credentials']['Username'] = self.username
             config['Geoserver Credentials']['password'] = self.password
-            with open('auth.ini', 'w') as configfile:
+            with open('geoserver_auth.ini', 'w') as configfile:
                 config.write(configfile)
         else:
             print("Information already exists...")
@@ -92,6 +92,8 @@ class Auth:
                                 TESTING
 *************************************************************************************************
 """
+
+
 # url = input("Enter url: ")
 # username = input("Enter username: ")
 # password = input("Enter password: ")
